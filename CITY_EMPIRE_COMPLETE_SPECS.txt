@@ -1,0 +1,1589 @@
+# 🏙️ CITY EMPIRE BOT - COMPLETE SPECIFICATIONS
+## Telegram City Management & Strategy Game
+
+═══════════════════════════════════════════════════════════════════
+
+## 📋 PROJECT OVERVIEW
+
+**Bot Name:** City Empire Bot
+**Type:** Telegram-based City Management & Strategy Game
+**Platform:** Telegram
+**Language:** Python 3.11+
+**Main Library:** python-telegram-bot 20.7
+**AI Integration:** Groq API (llama-3.1-70b-versatile)
+**Database:** SQLite (async)
+**Architecture:** Event-driven, Plugin-based
+
+**Bot Token:** 8340119606:AAHoUTUtg36CaF2eSKpcQLwuS2kcPdCGoos
+**Groq API Key:** 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
+
+═══════════════════════════════════════════════════════════════════
+
+## 💾 DATABASE SCHEMA (15+ TABLES)
+
+### 1. CITIES TABLE
+Primary table for city management
+
+**Fields:**
+- city_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_name (TEXT UNIQUE NOT NULL)
+- owner_id (INTEGER NOT NULL) - Telegram user ID
+- level (INTEGER DEFAULT 1)
+- xp (INTEGER DEFAULT 0)
+- gold (INTEGER DEFAULT 1000) - Starting gold
+- wood (INTEGER DEFAULT 500) - Starting wood
+- stone (INTEGER DEFAULT 300) - Starting stone
+- food (INTEGER DEFAULT 200) - Starting food
+- population (INTEGER DEFAULT 100)
+- max_population (INTEGER DEFAULT 500)
+- defense_power (INTEGER DEFAULT 50)
+- attack_power (INTEGER DEFAULT 30)
+- morale (INTEGER DEFAULT 100) - Range: 0-100
+- invite_code (TEXT UNIQUE) - 6-character join code
+- peace_shield (INTEGER DEFAULT 0) - Boolean flag
+- peace_shield_expires (TIMESTAMP NULL)
+- last_collected (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- updated_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Indexes:**
+- idx_cities_owner (owner_id)
+- idx_cities_code (invite_code)
+
+---
+
+### 2. USERS TABLE
+Player profiles and relationships
+
+**Fields:**
+- user_id (INTEGER PRIMARY KEY) - Telegram user ID
+- username (TEXT)
+- city_id (INTEGER) - FOREIGN KEY to cities
+- role (TEXT DEFAULT 'citizen') - citizen/elder/leader
+- personal_gold (INTEGER DEFAULT 0)
+- contribution_points (INTEGER DEFAULT 0) - For city contributions
+- level (INTEGER DEFAULT 1) - User level
+- xp (INTEGER DEFAULT 0)
+- work_cooldown (TIMESTAMP NULL) - Last work time
+- birthday (DATE NULL)
+- partner_user_id (INTEGER NULL) - Couple system
+- relationship_since (TIMESTAMP NULL)
+- love_points (INTEGER DEFAULT 0)
+- reputation (INTEGER DEFAULT 0)
+- jealousy_level (INTEGER DEFAULT 0)
+- joined_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Indexes:**
+- idx_users_city (city_id)
+- idx_users_partner (partner_user_id)
+
+---
+
+### 3. BUILDINGS TABLE
+City infrastructure
+
+**Fields:**
+- building_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_id (INTEGER NOT NULL) - FOREIGN KEY
+- building_type (TEXT NOT NULL) - farm/mine/barracks/wall/warehouse/house
+- level (INTEGER DEFAULT 1)
+- position (INTEGER) - Grid position (1-25 for 5x5 grid)
+- upgrade_started (TIMESTAMP NULL)
+- upgrade_completes (TIMESTAMP NULL)
+- production_rate (INTEGER DEFAULT 0) - Resources per hour
+- capacity (INTEGER DEFAULT 0) - Storage capacity
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Building Types:**
+- farm: Food production
+- mine: Stone production
+- lumbermill: Wood production
+- barracks: Train troops, increase attack
+- wall: Increase defense
+- warehouse: Increase storage
+- house: Increase max population
+- market: Trading hub
+- temple: Morale boost
+- academy: Research boost
+
+**Indexes:**
+- idx_buildings_city (city_id)
+- idx_buildings_type (building_type)
+
+---
+
+### 4. WARS TABLE
+Attack and defense tracking
+
+**Fields:**
+- war_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- attacker_city_id (INTEGER NOT NULL)
+- defender_city_id (INTEGER NOT NULL)
+- attack_power (INTEGER NOT NULL)
+- defense_power (INTEGER NOT NULL)
+- attacker_troops (INTEGER DEFAULT 0)
+- defender_troops (INTEGER DEFAULT 0)
+- result (TEXT) - 'win', 'loss', 'draw', 'pending'
+- loot_gold (INTEGER DEFAULT 0)
+- loot_wood (INTEGER DEFAULT 0)
+- loot_stone (INTEGER DEFAULT 0)
+- loot_food (INTEGER DEFAULT 0)
+- casualties_attacker (INTEGER DEFAULT 0)
+- casualties_defender (INTEGER DEFAULT 0)
+- travel_starts (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- travel_ends (TIMESTAMP)
+- battle_time (TIMESTAMP NULL)
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Indexes:**
+- idx_wars_attacker (attacker_city_id)
+- idx_wars_defender (defender_city_id)
+
+---
+
+### 5. MISSIONS TABLE
+AI-generated daily missions
+
+**Fields:**
+- mission_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_id (INTEGER NOT NULL)
+- mission_type (TEXT NOT NULL) - resource/military/social/construction
+- title (TEXT NOT NULL)
+- description (TEXT NOT NULL)
+- required_progress (INTEGER DEFAULT 1)
+- current_progress (INTEGER DEFAULT 0)
+- rewards_json (TEXT) - JSON: {gold: 500, xp: 100}
+- penalties_json (TEXT NULL) - JSON for failures
+- mandatory (INTEGER DEFAULT 0) - Boolean
+- expires_at (TIMESTAMP)
+- completed (INTEGER DEFAULT 0)
+- failed (INTEGER DEFAULT 0)
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Mission Types:**
+- resource: Collect X resources
+- military: Train troops, win battles
+- social: Add citizens, improve morale
+- construction: Build/upgrade buildings
+
+**Indexes:**
+- idx_missions_city (city_id)
+- idx_missions_expires (expires_at)
+
+---
+
+### 6. TRADES TABLE
+Inter-city trading
+
+**Fields:**
+- trade_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- from_city_id (INTEGER NOT NULL)
+- to_city_id (INTEGER NULL) - NULL for public offers
+- resources_offered_json (TEXT NOT NULL) - {gold: 100, wood: 50}
+- resources_requested_json (TEXT NOT NULL) - {stone: 30, food: 20}
+- status (TEXT DEFAULT 'pending') - pending/accepted/rejected/cancelled
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- expires_at (TIMESTAMP)
+- completed_at (TIMESTAMP NULL)
+
+**Indexes:**
+- idx_trades_from (from_city_id)
+- idx_trades_to (to_city_id)
+- idx_trades_status (status)
+
+---
+
+### 7. SPY_MISSIONS TABLE
+Intelligence gathering
+
+**Fields:**
+- spy_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- spy_city_id (INTEGER NOT NULL)
+- target_city_id (INTEGER NOT NULL)
+- mission_type (TEXT NOT NULL) - scout/sabotage/steal
+- intel_data_json (TEXT NULL) - JSON with gathered info
+- success (INTEGER DEFAULT 0) - Boolean
+- caught (INTEGER DEFAULT 0) - Boolean
+- executed_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Mission Types:**
+- scout: View resources, defenses
+- sabotage: Reduce production
+- steal: Steal resources
+
+**Indexes:**
+- idx_spy_city (spy_city_id)
+- idx_spy_target (target_city_id)
+
+---
+
+### 8. RELATIONSHIPS TABLE
+Player-to-player connections
+
+**Fields:**
+- relationship_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- user1_id (INTEGER NOT NULL)
+- user2_id (INTEGER NOT NULL)
+- relationship_type (TEXT NOT NULL) - couple/friend/rival
+- points (INTEGER DEFAULT 0) - Relationship strength
+- status (TEXT DEFAULT 'active') - active/broken
+- started_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- updated_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Indexes:**
+- idx_rel_users (user1_id, user2_id)
+
+---
+
+### 9. RIVALRIES TABLE
+Player challenges and competitions
+
+**Fields:**
+- rivalry_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- challenger_id (INTEGER NOT NULL)
+- opponent_id (INTEGER NOT NULL)
+- challenge_type (TEXT NOT NULL) - build/collect/battle
+- challenger_score (INTEGER DEFAULT 0)
+- opponent_score (INTEGER DEFAULT 0)
+- winner_id (INTEGER NULL)
+- reward_gold (INTEGER DEFAULT 0)
+- started_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- expires_at (TIMESTAMP)
+- completed (INTEGER DEFAULT 0)
+
+**Indexes:**
+- idx_rivalry_challenger (challenger_id)
+- idx_rivalry_opponent (opponent_id)
+
+---
+
+### 10. ACHIEVEMENTS TABLE
+Player accomplishments
+
+**Fields:**
+- achievement_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- user_id (INTEGER NOT NULL)
+- achievement_code (TEXT NOT NULL) - first_war, level_10, etc.
+- achievement_name (TEXT NOT NULL)
+- achievement_desc (TEXT)
+- reward_gold (INTEGER DEFAULT 0)
+- reward_xp (INTEGER DEFAULT 0)
+- unlocked_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Achievement Codes:**
+- first_city: Create first city
+- first_war: Win first war
+- level_10: Reach level 10
+- rich: 10,000 gold
+- builder: 10 buildings
+- conqueror: Win 10 wars
+- diplomat: 5 successful trades
+- spy_master: 10 successful spies
+
+**Indexes:**
+- idx_achievements_user (user_id)
+- idx_achievements_code (achievement_code)
+
+---
+
+### 11. INVENTORY TABLE
+Player items and resources
+
+**Fields:**
+- inventory_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- user_id (INTEGER NOT NULL)
+- item_type (TEXT NOT NULL) - shield/boost/decoration
+- item_code (TEXT NOT NULL)
+- quantity (INTEGER DEFAULT 1)
+- metadata_json (TEXT NULL) - Item-specific data
+- acquired_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Item Types:**
+- shield: Peace shields (3h, 8h, 24h)
+- boost: Production boosts (2x resources, 24h)
+- decoration: City cosmetics
+- special: Event items
+
+**Indexes:**
+- idx_inventory_user (user_id)
+- idx_inventory_item (item_code)
+
+---
+
+### 12. EVENTS_LOG TABLE
+City activity tracking
+
+**Fields:**
+- event_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_id (INTEGER NOT NULL)
+- event_type (TEXT NOT NULL) - war/trade/mission/join/leave
+- event_data_json (TEXT) - Event-specific data
+- timestamp (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Event Types:**
+- war_attack: City attacked
+- war_defend: City defended
+- trade_sent: Trade offer sent
+- trade_received: Trade completed
+- mission_completed: Mission done
+- user_joined: New citizen
+- user_left: Citizen left
+- building_built: New building
+- level_up: City leveled up
+
+**Indexes:**
+- idx_events_city (city_id)
+- idx_events_type (event_type)
+- idx_events_time (timestamp)
+
+---
+
+### 13. TROOPS TABLE
+Military units
+
+**Fields:**
+- troop_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_id (INTEGER NOT NULL)
+- troop_type (TEXT NOT NULL) - warrior/archer/cavalry/siege
+- quantity (INTEGER DEFAULT 0)
+- training_started (TIMESTAMP NULL)
+- training_completes (TIMESTAMP NULL)
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Troop Types:**
+- warrior: Basic infantry (Attack: 5, Defense: 3, Cost: 50g/10w)
+- archer: Ranged unit (Attack: 7, Defense: 2, Cost: 70g/15w)
+- cavalry: Fast unit (Attack: 10, Defense: 5, Cost: 120g/30w/10f)
+- siege: Heavy damage (Attack: 20, Defense: 8, Cost: 200g/50w/50s)
+
+**Indexes:**
+- idx_troops_city (city_id)
+
+---
+
+### 14. RESEARCH TABLE
+Technology upgrades
+
+**Fields:**
+- research_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- city_id (INTEGER NOT NULL)
+- tech_code (TEXT NOT NULL)
+- level (INTEGER DEFAULT 1)
+- research_started (TIMESTAMP NULL)
+- research_completes (TIMESTAMP NULL)
+- completed (INTEGER DEFAULT 0)
+
+**Tech Codes:**
+- mining: +10% stone production per level
+- farming: +10% food production per level
+- lumbering: +10% wood production per level
+- fortification: +5% defense per level
+- tactics: +5% attack per level
+- economy: -5% building costs per level
+
+**Indexes:**
+- idx_research_city (city_id)
+- idx_research_tech (tech_code)
+
+---
+
+### 15. NOTIFICATIONS TABLE
+Player notifications
+
+**Fields:**
+- notification_id (INTEGER PRIMARY KEY AUTOINCREMENT)
+- user_id (INTEGER NOT NULL)
+- notification_type (TEXT NOT NULL)
+- title (TEXT NOT NULL)
+- message (TEXT NOT NULL)
+- read (INTEGER DEFAULT 0)
+- action_data_json (TEXT NULL) - Button actions
+- created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+
+**Notification Types:**
+- war: War results
+- trade: Trade updates
+- mission: Mission reminders
+- city: City events
+- social: Relationship updates
+
+**Indexes:**
+- idx_notif_user (user_id)
+- idx_notif_read (read)
+
+═══════════════════════════════════════════════════════════════════
+
+## 🎮 CORE FEATURES
+
+### 1. CITY CREATION & MANAGEMENT
+
+**City Creation:**
+- Player creates city with unique name
+- Generates 6-character invite code
+- Becomes city leader (founder)
+- Starting resources:
+  - Gold: 1000
+  - Wood: 500
+  - Stone: 300
+  - Food: 200
+  - Population: 100
+
+**City Stats:**
+- Level: 1-50
+- XP: Progress toward next level
+- Resources: Gold, Wood, Stone, Food
+- Population: Current/Max
+- Defense Power: Total defense
+- Attack Power: Total attack
+- Morale: 0-100 (affects production)
+
+**Leveling System:**
+- XP needed = 1000 × (level ^ 1.5)
+- Level 1→2: 1000 XP
+- Level 5→6: 11,180 XP
+- Level 10→11: 31,623 XP
+- Gain XP from: Wars, missions, trades, building
+
+**Resource Production:**
+- Base rate per hour = 50 gold, 30 wood, 20 stone, 40 food
+- Multiplied by city level
+- Boosted by buildings (farm +20% food, mine +20% stone)
+- Affected by morale (50% morale = 50% production)
+
+**City Roles:**
+- Leader: Full control, manage everything
+- Elder: Manage buildings, accept citizens
+- Citizen: Work, contribute, participate
+
+---
+
+### 2. BUILDING SYSTEM
+
+**Building Types:**
+
+**Production Buildings:**
+- Farm: +20% food production per level
+- Mine: +20% stone production per level
+- Lumbermill: +20% wood production per level
+
+**Military Buildings:**
+- Barracks: Train troops, +10 attack per level
+- Wall: +20 defense per level
+- Watchtower: Detect spies, +5 defense
+
+**Utility Buildings:**
+- Warehouse: +500 storage capacity per level
+- House: +50 max population per level
+- Market: Enable trading, reduce trade tax
+- Temple: +5 morale per level
+- Academy: Faster research, +10% XP
+
+**Building Mechanics:**
+- 5×5 grid (25 building slots)
+- Upgrade costs increase per level
+- Upgrade time: 30 min × level
+- Max level per building: 10
+- Some buildings unlock at certain city levels
+
+**Building Costs (Level 1):**
+- Farm: 100g, 50w
+- Mine: 150g, 40w, 40s
+- Barracks: 200g, 100w, 50s
+- Wall: 300g, 150w, 200s
+- Warehouse: 100g, 80w
+- House: 80g, 100w
+
+---
+
+### 3. WAR SYSTEM
+
+**War Mechanics:**
+
+**Initiating Attack:**
+- Select target city
+- Choose number of troops
+- Travel time based on distance (1-5 hours)
+- Can't attack cities with peace shield
+
+**Battle Calculation:**
+- Attacker Total = Attack Power + (Troops × Troop Attack)
+- Defender Total = Defense Power + (Troops × Troop Defense) + Wall Bonus
+- Winner = Higher total
+- Close battles (difference <10%) = draw
+
+**War Results:**
+
+**Attacker Wins:**
+- Loot 30% of defender's gold
+- Loot 20% of wood, stone, food
+- Gain 200 XP
+- Defender loses troops (50% casualties)
+
+**Defender Wins:**
+- Attacker loses troops (70% casualties)
+- Defender gains 100 XP
+- Resources safe
+
+**Draw:**
+- Both sides lose 30% troops
+- No loot
+- Both gain 50 XP
+
+**War Cooldown:**
+- Can't attack same city for 6 hours
+- Peace shield available (3h/8h/24h)
+
+---
+
+### 4. TRADING SYSTEM
+
+**Trade Types:**
+
+**Direct Trade:**
+- Send offer to specific city
+- Specify resources offered and requested
+- Target city accepts/rejects
+- 24-hour expiration
+
+**Public Marketplace:**
+- Post offer for anyone
+- First come first served
+- Market building reduces fees (5% → 2%)
+
+**Trade Examples:**
+- Offer: 500 gold → Request: 200 wood, 100 stone
+- Offer: 300 food, 200 wood → Request: 400 gold
+
+**Trade Analysis (AI):**
+- AI evaluates fairness
+- Suggests counter-offers
+- Warns about bad deals
+
+---
+
+### 5. SPY SYSTEM
+
+**Spy Missions:**
+
+**Scout Mission:**
+- Cost: 200 gold
+- Success rate: 70%
+- Reveals: Resources, buildings, troops
+- Risk: 20% caught
+
+**Sabotage Mission:**
+- Cost: 500 gold
+- Success rate: 50%
+- Effect: Reduce production 50% for 6 hours
+- Risk: 40% caught
+
+**Steal Mission:**
+- Cost: 300 gold
+- Success rate: 60%
+- Steals: 10% of resources
+- Risk: 30% caught
+
+**Caught Penalties:**
+- Spy identity revealed
+- Fine: 1000 gold
+- Reputation loss
+- Target can retaliate
+
+---
+
+### 6. MISSION SYSTEM (AI-POWERED)
+
+**Daily Missions:**
+- Generated daily by AI (Groq API)
+- Based on city state and progress
+- 3 missions per day
+- 24-hour expiration
+
+**Mission Categories:**
+
+**Resource Missions:**
+- Collect 1000 gold
+- Gather 500 wood
+- Mine 300 stone
+- Farm 400 food
+
+**Military Missions:**
+- Train 10 warriors
+- Win a battle
+- Upgrade barracks to level 3
+
+**Social Missions:**
+- Recruit 2 new citizens
+- Reach 80% morale
+- Complete a trade
+
+**Construction Missions:**
+- Build a farm
+- Upgrade any building
+- Reach city level 5
+
+**Rewards:**
+- Gold: 200-1000
+- XP: 50-300
+- Items: Shields, boosts
+
+**AI Generation:**
+- Contextual to city state
+- Balanced difficulty
+- Dynamic rewards
+- Story-driven descriptions
+
+---
+
+### 7. WORK SYSTEM
+
+**Jobs Available:**
+
+**Construction Worker:**
+- Earn: 500 gold
+- Contribution: 10 CP
+- XP: 100
+- Cooldown: 24 hours
+
+**City Guard:**
+- Earn: 600 gold
+- Contribution: 12 CP
+- XP: 120
+- Boost: +5 defense (temporary)
+
+**Market Trader:**
+- Earn: 300 gold
+- Contribution: 8 CP
+- XP: 80
+- Boost: -5% trade fees (24h)
+
+**Mini-Game Worker:**
+- Play quick game
+- Earn: 200-400 gold (skill-based)
+- Contribution: 5 CP
+- XP: 50
+
+**Work Mechanics:**
+- 24-hour cooldown per job
+- Can do 1 job per day
+- Contribution points for city ranking
+- XP for user leveling
+
+---
+
+### 8. RELATIONSHIP SYSTEM
+
+**Couple System:**
+
+**Partner Benefits:**
+- +20% personal income (work)
+- +30% duo attack bonus
+- 0% gift tax (free transfers)
+- Shared achievement bonuses
+
+**Forming Partnership:**
+- Send proposal
+- Partner accepts
+- Relationship starts
+- Love points accumulate
+
+**Love Points:**
+- Work together: +10 LP
+- Gift resources: +5 LP per gift
+- Complete missions together: +20 LP
+- Win duo battles: +30 LP
+
+**Jealousy System:**
+- Trading with opposite gender: +5 jealousy
+- High jealousy (>50): -10% bonuses
+- Resolve: Spend time together, gifts
+
+**Breakup:**
+- Either partner can initiate
+- Bonuses lost
+- 48-hour cooldown before new partner
+
+---
+
+### 9. RIVALRY SYSTEM
+
+**Challenge Types:**
+
+**Building Race:**
+- First to build X buildings wins
+- 48-hour time limit
+- Reward: 1000 gold
+
+**Resource Collection:**
+- Collect most gold/wood/stone
+- 24-hour time limit
+- Reward: 800 gold
+
+**Battle Competition:**
+- Most war victories
+- 7-day time limit
+- Reward: 2000 gold, rare item
+
+**Challenge Mechanics:**
+- Send challenge to any player
+- Stakes: 500 gold entry fee
+- Winner takes all + bonus
+- Loser loses entry fee
+
+---
+
+### 10. ACHIEVEMENT SYSTEM
+
+**Achievement Categories:**
+
+**Milestone Achievements:**
+- First City: Create a city
+- Level 10: Reach city level 10
+- Level 25: Reach city level 25
+- Level 50: Max level
+
+**Combat Achievements:**
+- First Blood: Win first war
+- Conqueror: Win 10 wars
+- Warlord: Win 50 wars
+- Undefeated: 10 wins, 0 losses
+
+**Economic Achievements:**
+- Wealthy: 10,000 gold
+- Tycoon: 100,000 gold
+- Trader: Complete 10 trades
+- Merchant: Complete 50 trades
+
+**Builder Achievements:**
+- Architect: Build 10 buildings
+- City Planner: Build 25 buildings
+- Metropolis: Max all building slots
+
+**Social Achievements:**
+- Popular: 10 citizens
+- Crowded: 50 citizens
+- Megacity: 100 citizens
+
+**Spy Achievements:**
+- Spy Master: 10 successful spies
+- Shadow: 50 successful spies
+- Uncaught: 20 spies, 0 caught
+
+**Rewards:**
+- Gold: 100-5000
+- XP: 50-1000
+- Special items
+- Title badges
+
+═══════════════════════════════════════════════════════════════════
+
+## 🤖 AI INTEGRATION (GROQ API)
+
+**AI Module Functions:**
+
+### 1. MISSION GENERATION
+```
+generate_mission(city_data)
+```
+**Input:**
+- City level
+- Resources
+- Buildings
+- Recent activity
+
+**Output:**
+- Mission type
+- Title
+- Description
+- Requirements
+- Rewards
+- Story context
+
+**Example:**
+```json
+{
+  "type": "resource",
+  "title": "Winter Stockpile",
+  "description": "The harsh winter approaches. Your people need food reserves. Gather 800 food to prepare for the cold months ahead.",
+  "required_progress": 800,
+  "rewards": {
+    "gold": 600,
+    "xp": 150
+  }
+}
+```
+
+---
+
+### 2. TRADE ANALYSIS
+```
+analyze_trade(offer, request)
+```
+**Input:**
+- Resources offered
+- Resources requested
+- Market rates
+
+**Output:**
+- Fairness score (0-100)
+- Recommendation
+- Suggested counter-offer
+
+**Example:**
+```json
+{
+  "fairness": 45,
+  "verdict": "Unfair to you",
+  "reason": "You're offering 500 gold for 100 wood. Market rate is 200 gold for 100 wood.",
+  "suggestion": "Counter with 200 gold or request 250 wood"
+}
+```
+
+---
+
+### 3. EVENT GENERATION
+```
+generate_event(city_state)
+```
+**Input:**
+- City stats
+- Season
+- Recent events
+
+**Output:**
+- Event type
+- Description
+- Effects
+- Choices (if applicable)
+
+**Example:**
+```json
+{
+  "type": "random_event",
+  "title": "Merchant Caravan",
+  "description": "A merchant caravan passes through your city. They offer rare goods at a discount.",
+  "choices": [
+    {"action": "buy", "cost": 300, "reward": "production_boost"},
+    {"action": "ignore", "effect": null}
+  ]
+}
+```
+
+---
+
+### 4. AI ADVISOR
+```
+get_advice(city_data, question)
+```
+**Input:**
+- City state
+- User question
+
+**Output:**
+- Strategy advice
+- Recommendations
+- Warnings
+
+**Example:**
+Input: "Should I upgrade my farm or mine?"
+Output: "Your food is low (150/1000) and you have 800 stone. Upgrade the farm first to boost food production. Then use excess stone to upgrade the mine."
+
+---
+
+**AI Models Available (Groq):**
+- llama-3.1-70b-versatile (default, balanced)
+- llama-3.1-8b-instant (fast responses)
+- llama-3.3-70b-versatile (advanced reasoning)
+- mixtral-8x7b-32768 (long context)
+- gemma2-9b-it (efficient)
+
+═══════════════════════════════════════════════════════════════════
+
+## ⚙️ GAME MECHANICS
+
+### RESOURCE FORMULAS
+
+**Production Per Hour:**
+```
+Base Production = City Level × Base Rate
+Farm Bonus = Base × (Farm Level × 0.20)
+Morale Multiplier = Morale / 100
+Research Bonus = Tech Level × 0.10
+
+Final Production = (Base + Farm Bonus) × Morale × (1 + Research)
+```
+
+**Example (Level 5 City):**
+```
+Base Food = 5 × 40 = 200/hr
+Farm Level 3 = 200 × 0.60 = 120 bonus
+Morale 80% = × 0.80
+Research Level 2 = × 1.20
+
+Total = (200 + 120) × 0.80 × 1.20 = 307 food/hr
+```
+
+---
+
+**XP Formula:**
+```
+XP Needed = 1000 × (Level ^ 1.5)
+```
+
+**Level Table:**
+```
+Level 1 → 2:    1,000 XP
+Level 2 → 3:    2,828 XP
+Level 3 → 4:    5,196 XP
+Level 5 → 6:   11,180 XP
+Level 10 → 11: 31,623 XP
+Level 20 → 21: 89,443 XP
+Level 50 → MAX
+```
+
+---
+
+**Battle Power:**
+```
+Attack Power = Base Attack + (Barracks × 10) + (Troops × Troop Attack) + (Research × 5)
+Defense Power = Base Defense + (Wall × 20) + (Troops × Troop Defense) + (Research × 5)
+```
+
+**Example Battle:**
+```
+Attacker:
+- Base: 30
+- Barracks L3: 30
+- 20 Warriors: 100 (20 × 5)
+- Research L2: 10
+Total Attack: 170
+
+Defender:
+- Base: 50
+- Wall L5: 100
+- 15 Warriors: 45 (15 × 3)
+- Research L1: 5
+Total Defense: 200
+
+Result: Defender Wins
+```
+
+---
+
+**Morale System:**
+```
+Morale Factors:
+- Starting: 100%
+- Lost war: -10
+- Won war: +5
+- Low food (<100): -1 per hour
+- Temple: +5 per level
+- Overcrowding (pop > max): -2 per hour
+- Recent join: +3
+```
+
+**Morale Effects:**
+```
+100% morale = 100% production
+80% morale = 80% production
+50% morale = 50% production
+0% morale = Citizens may leave
+```
+
+---
+
+**Storage Capacity:**
+```
+Base Storage = 5000 per resource
+Warehouse Bonus = Level × 500
+
+Total = 5000 + (Warehouse Level × 500)
+
+Example:
+Warehouse L5 = 5000 + 2500 = 7500 max
+```
+
+---
+
+**Population Growth:**
+```
+Base Max = 500
+House Bonus = Level × 50
+
+Max Population = 500 + (House Level × 50)
+
+Growth Rate = 1 citizen per 2 hours (if food > 100)
+```
+
+═══════════════════════════════════════════════════════════════════
+
+## 🏗️ ARCHITECTURE
+
+### EVENT-DRIVEN SYSTEM
+
+**Event Bus:**
+- Pub/sub pattern
+- Features subscribe to events
+- Decoupled communication
+
+**Event Types:**
+```
+- city.created
+- city.level_up
+- resource.collected
+- building.built
+- building.upgraded
+- war.started
+- war.completed
+- trade.created
+- trade.completed
+- mission.assigned
+- mission.completed
+- user.joined
+- user.left
+- spy.executed
+- relationship.formed
+- achievement.unlocked
+```
+
+**Event Flow:**
+```
+Feature A → Publish Event → Event Bus → Feature B listens → React
+```
+
+**Example:**
+```
+1. User completes mission
+2. Mission system publishes "mission.completed" event
+3. Rewards system listens, adds gold/XP
+4. Achievement system listens, checks if achievement unlocked
+5. Notification system listens, sends notification
+```
+
+---
+
+### PLUGIN ARCHITECTURE
+
+**Plugin Loader:**
+- Auto-discover features from features/ directory
+- Load config.yaml per feature
+- Initialize in dependency order
+- Hot-reload support
+
+**Feature Structure:**
+```
+features/
+├── wars/
+│   ├── config.yaml
+│   ├── feature.py
+│   ├── handlers.py
+│   └── database.py
+├── trading/
+│   ├── config.yaml
+│   ├── feature.py
+│   └── handlers.py
+└── missions/
+    ├── config.yaml
+    ├── feature.py
+    └── ai_generator.py
+```
+
+**config.yaml Example:**
+```yaml
+name: "Wars"
+version: "1.0"
+depends_on: ["database", "cities"]
+auto_load: true
+events_listen:
+  - "city.level_up"
+  - "war.completed"
+```
+
+---
+
+### DATABASE ARCHITECTURE
+
+**Async SQLite:**
+- aiosqlite for async operations
+- Connection pooling
+- Migration system
+
+**Helper Functions:**
+```python
+fetchone(query, params) → dict | None
+fetchall(query, params) → list[dict]
+fetchval(query, params) → Any
+execute(query, params) → None
+```
+
+**Migration System:**
+```
+migrations/
+├── 001_create_cities.sql
+├── 002_create_users.sql
+├── 003_create_buildings.sql
+└── ...
+```
+
+═══════════════════════════════════════════════════════════════════
+
+## 🎨 UI/UX FEATURES
+
+### BUTTON LAYOUTS
+
+**Main Menu:**
+```
+[🏙️ My City] [📊 Stats]
+[⚔️ War] [💰 Trade]
+[🔍 Spy] [📋 Missions]
+[👥 Citizens] [🏆 Rankings]
+[ℹ️ Help]
+```
+
+**City View:**
+```
+🏙️ CITY NAME (Level 5)
+XP: ████████░░ 8000/11180
+
+💰 Gold: 5,430
+🪵 Wood: 1,200
+🪨 Stone: 850
+🍖 Food: 640
+
+👥 Population: 250/500
+😊 Morale: 85%
+🛡️ Defense: 180
+⚔️ Attack: 120
+
+[📦 Collect] [🏗️ Build]
+[⬆️ Upgrade] [👥 Manage]
+```
+
+**War Screen:**
+```
+⚔️ START WAR
+
+Target: EnemyCity (L7)
+Defense: 220
+
+Your Attack: 170
+Troops: 20 Warriors
+
+Travel Time: 2h 30m
+
+Estimated:
+🎯 Win Chance: 40%
+💰 Potential Loot: ~1,500g
+
+[⚔️ Attack] [◀️ Back]
+```
+
+---
+
+### NOTIFICATIONS
+
+**War Result:**
+```
+⚔️ WAR RESULT
+
+Victory! 🎉
+
+You defeated CityName!
+
+Loot:
+💰 +1,200 gold
+🪵 +300 wood
+🪨 +150 stone
+
+Casualties: 8 warriors
+
+[View Details]
+```
+
+**Mission Complete:**
+```
+✅ MISSION COMPLETE
+
+"Winter Stockpile"
+
+Rewards:
+💰 +600 gold
+⭐ +150 XP
+
+Level Up! 🎉
+You are now Level 6!
+
+[Claim]
+```
+
+---
+
+### PROGRESS BARS
+
+**HP/XP Bars:**
+```
+████████████████░░░░ 80%
+```
+
+**Resource Indicators:**
+```
+💰 5,430 / 7,500 ███████░░░
+🪵 1,200 / 7,500 ████░░░░░░
+```
+
+**Building Status:**
+```
+Farm (Level 3)
+⬆️ Upgrading to Level 4
+████████░░░░ 2h 15m left
+```
+
+═══════════════════════════════════════════════════════════════════
+
+## 📊 ADVANCED FEATURES
+
+### 1. SEASONS SYSTEM
+
+**4 Seasons (3 months each):**
+
+**Spring (Mar-May):**
+- +20% food production
+- -10% building costs
+- Higher population growth
+
+**Summer (Jun-Aug):**
+- +10% all production
+- +15% morale
+- Higher trade activity
+
+**Fall (Sep-Nov):**
+- +30% wood production
+- Harvest events
+- Trade bonuses
+
+**Winter (Dec-Feb):**
+- -20% food production
+- +10% defense (snow advantage)
+- Higher food consumption
+
+---
+
+### 2. RESEARCH SYSTEM
+
+**Technologies:**
+
+**Economy Tree:**
+- Mining I-V: +10% stone per level
+- Farming I-V: +10% food per level
+- Lumbering I-V: +10% wood per level
+- Trading I-III: -5% trade fees per level
+
+**Military Tree:**
+- Fortification I-V: +5% defense per level
+- Tactics I-V: +5% attack per level
+- Recruitment I-III: -10% troop training time
+- Espionage I-III: +10% spy success rate
+
+**Social Tree:**
+- Housing I-III: +10% max population
+- Education I-III: +10% XP gain
+- Medicine I-III: -10% population loss in war
+
+**Research Costs:**
+```
+Level 1: 500g, 200w, 2h
+Level 2: 1000g, 400w, 4h
+Level 3: 2000g, 800w, 8h
+Level 4: 4000g, 1600w, 16h
+Level 5: 8000g, 3200w, 32h
+```
+
+---
+
+### 3. WORLD EVENTS
+
+**Random Events:**
+- Merchant Caravan (trade discount)
+- Bandit Raid (defense challenge)
+- Festival (morale boost)
+- Plague (population loss)
+- Discovery (resource bonus)
+- Meteor (stone bonus, damage)
+
+**Frequency:** 1-2 per week per city
+
+**AI-Generated:**
+- Contextual to city state
+- Dynamic effects
+- Choice-based outcomes
+
+---
+
+### 4. ALLIANCE SYSTEM
+
+**Alliance Features:**
+- 5-50 cities per alliance
+- Shared warehouse (10% contribution)
+- Alliance wars (coordinated attacks)
+- Alliance missions (group goals)
+- Alliance chat
+
+**Alliance Ranks:**
+- Leader: Full control
+- Officer: Manage members
+- Member: Participate
+
+**Alliance Benefits:**
+- +5% production
+- Mutual defense pact
+- Shared research bonuses
+
+---
+
+### 5. LEADERBOARDS
+
+**Categories:**
+
+**City Rankings:**
+1. Total Power (attack + defense)
+2. Population
+3. Level
+4. Resources
+
+**Player Rankings:**
+1. Personal Gold
+2. Contribution Points
+3. Wars Won
+4. Achievements Unlocked
+
+**Alliance Rankings:**
+1. Total Members
+2. Combined Power
+3. Wars Won
+4. Resources
+
+**Rewards (Weekly):**
+- Top 10 cities: Gold bonus
+- Top 3: Special items
+- #1: Unique title
+
+═══════════════════════════════════════════════════════════════════
+
+## 🎯 MINI FEATURES
+
+### 1. BIRTHDAY SYSTEM
+- Set birthday in profile
+- Get 1000 gold on birthday
+- City announcement
+- +50 morale boost
+- Special birthday mission
+
+### 2. DAILY LOGIN REWARDS
+- Day 1: 100 gold
+- Day 3: 300 gold
+- Day 7: 1000 gold, 3h shield
+- Day 30: 5000 gold, rare item
+- Streak resets if miss a day
+
+### 3. REFERRAL SYSTEM
+- Invite friends with code
+- Both get 500 gold
+- Referrer gets 5% of friend's earnings
+- Bonus after 10 referrals
+
+### 4. RESOURCE MARKET
+- Buy/sell resources for gold
+- Dynamic pricing
+- AI price suggestions
+- Daily price fluctuations
+
+### 5. DECORATIONS
+- Cosmetic city upgrades
+- Flags, statues, gardens
+- No gameplay benefit
+- Prestige value
+- Tradeable
+
+### 6. WEATHER SYSTEM
+- Affects production
+- Rain: +10% farm
+- Snow: -10% all, +10% defense
+- Drought: -20% farm
+- Changes daily
+
+### 7. CITY CUSTOMIZATION
+- Choose city flag
+- Pick color scheme
+- Custom motto
+- Coat of arms
+
+### 8. DIPLOMACY
+- Form non-aggression pacts
+- Trade agreements (reduced fees)
+- Mutual defense treaties
+- Embassy buildings
+
+### 9. QUESTS (Story Mode)
+- Tutorial quests
+- Story progression
+- Unlocks features
+- Major rewards
+- 50+ quests
+
+### 10. TIME-LIMITED EVENTS
+- Halloween: Special missions
+- Christmas: Double resources
+- New Year: Bonus XP
+- Summer Festival: Trading event
+- Weekly challenges
+
+### 11. CITY SPECIALIZATIONS
+- Trade Hub: -20% trade fees
+- Military Fortress: +20% defense
+- Economic Center: +20% gold
+- Choose at level 10
+
+### 12. REPUTATION SYSTEM
+- Trustworthy: +5% trade success
+- Honorable: +10% in battles
+- Notorious: -10% costs but -morale
+- Based on actions
+
+### 13. CHAT SYSTEM
+- City chat (members only)
+- Global chat (all players)
+- Private messages
+- Alliance chat
+- Trade chat
+
+### 14. TUTORIALS
+- Interactive guide
+- Step-by-step missions
+- Rewards for completion
+- Skip option for veterans
+
+### 15. ADMIN TOOLS
+- God mode (debug)
+- Resource editor
+- User management
+- Event triggers
+- Analytics dashboard
+
+═══════════════════════════════════════════════════════════════════
+
+## 💡 UNIQUE MECHANICS
+
+### 1. MORALE-DRIVEN ECONOMY
+Unlike most games, morale directly affects production. Low morale = low output.
+Players must balance expansion with citizen happiness.
+
+### 2. AI-GENERATED CONTENT
+Daily missions are unique and contextual. No two players get the same missions.
+AI adapts to city state and player style.
+
+### 3. RELATIONSHIP BONUSES
+Couples get real gameplay advantages. Encourages social interaction.
+Jealousy system adds drama and strategy.
+
+### 4. EVENT-DRIVEN ARCHITECTURE
+Features are isolated plugins. Easy to add/remove features.
+Clean codebase, scalable design.
+
+### 5. FAIR WAR SYSTEM
+Travel time prevents instant attacks. Peace shields protect beginners.
+Balanced power calculations prevent farming weak players.
+
+### 6. MULTI-TIER PROGRESSION
+- City progression (level, buildings)
+- User progression (XP, achievements)
+- Research progression (tech tree)
+- Alliance progression (ranks, bonuses)
+
+### 7. ECONOMIC DEPTH
+- Production chains (farm → food → troops)
+- Trading economy (supply/demand)
+- Resource scarcity (storage limits)
+- Multiple currencies (gold, CP, LP)
+
+═══════════════════════════════════════════════════════════════════
+
+## 🔧 TECHNICAL SPECIFICATIONS
+
+**Core Technologies:**
+- Python 3.11+
+- python-telegram-bot 20.7
+- aiosqlite (async SQLite)
+- Groq API (AI generation)
+- asyncio (async operations)
+
+**Design Patterns:**
+- Event-driven architecture
+- Plugin system
+- Repository pattern (database)
+- Factory pattern (AI generation)
+- Observer pattern (notifications)
+
+**Performance:**
+- Async/await throughout
+- Connection pooling
+- Caching for frequent queries
+- Batch operations
+- Indexed database queries
+
+**Scalability:**
+- Plugin-based features (easy to add/remove)
+- Event bus decouples features
+- Database migrations
+- Config-driven behavior
+
+**Security:**
+- Input validation
+- SQL injection prevention (parameterized queries)
+- Rate limiting (work cooldowns)
+- Anti-cheat measures (validation)
+
+═══════════════════════════════════════════════════════════════════
+
+## 📈 PROGRESSION PATHS
+
+### NEW PLAYER (Level 1-5):
+1. Create city
+2. Tutorial missions
+3. Build farm, mine, lumbermill
+4. Recruit first citizens
+5. First trade
+6. First war (optional)
+
+### EARLY GAME (Level 5-15):
+1. Expand buildings
+2. Train troops
+3. Join/create alliance
+4. Research tech tree
+5. Daily missions
+6. Relationship building
+
+### MID GAME (Level 15-30):
+1. Specialize city
+2. Advanced warfare
+3. Alliance wars
+4. Leaderboard competition
+5. Advanced trading
+6. Event participation
+
+### LATE GAME (Level 30-50):
+1. Max buildings
+2. Complete tech tree
+3. Alliance dominance
+4. Top leaderboards
+5. Prestige collecting
+6. Mentoring new players
+
+═══════════════════════════════════════════════════════════════════
+
+END OF CITY EMPIRE BOT SPECIFICATIONS
+
+Total Tables: 15+
+Total Features: 50+
+Total Mechanics: 100+
+Development Time: 200+ hours
+Lines of Code: ~10,000+
