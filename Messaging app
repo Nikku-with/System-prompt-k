@@ -1,0 +1,316 @@
+create a cute maxxing - for cute peoples chat app add some tools like copy msg , reply , taag , dm , google auth to id and 1 user have one id but anonymous and create a own gc and a chnnel and add all gc and channel features and tools of telegram gc and channel have dm with giphy sticker and tg sticker or other any free website checkout for giving free stickers pack and emojies animate when sent it as a full msg like tg and chat box dashboard look proffesional and cute maxxing and genz style first for website new user create a svg or tsx video for coming he let u know the new users for features and a main intresting feature is setup acc with 50+ designs and avatear custom making tools search creating avatars and intresting acc setup add ai chat system call mistii with a hot chatty ai girlfreind on chatmaxxong website ai with no api from the pollination and change our whole web text font and colour are sky bule and melon yellow and white juicy exiting look and now u have massive work for create our gc for ready for ai and all same ditto gc \ channel settings and cmd and rights all same and all features of tg group and channel feature add on our web custom theme option and waha jab id banaye tabhi waha pr option aajaye pfp set krne ka image lagane ka aur ye proffesional nahi lag raha toh aap isse dark + light colour combo banao and change site colours and ui and msg forward option reply by sliding mobile freindly design and ek chat jo top pr hamesha rahegi saved msg wali jaha user group ke msg forward kr skta hai kuch bhi ke save kr skta hai and files bhi save kr sktta sab kuch and voice note bhejne ka option and now any typa files send kar skate hai all files 50+ and wo timer wali photos bhi bhej skte instagram ki trf once twice seen wali and spoiler ke sath bhi Here is a comprehensive list of 250+ advanced chat features inspired by Telegram and other enterprise messaging apps. They are categorized and explained in exactly one short sentence per item so your AI agent or developers can implement them directly.
+## 1. Messaging & Core Chat Mechanics
+
+* Direct Messaging: Send private messages to a single user.
+* Reply/Thread Support: Reference a specific message in a conversation.
+* Message Forwarding: Share messages from one chat directly into another.
+* Bulk Forwarding: Select and send multiple messages simultaneously to others.
+* Message Editing: Modify the text of an already sent message.
+* Unsend/Delete Globally: Delete a message for both yourself and the recipient.
+* Self-Destruct/Timer Messages: Set a countdown timer for automatic message deletion.
+* Rich Text Formatting: Apply bold, italic, underline, strikethrough, and monospace.
+* Spoiler Formatting: Hide sensitive text behind an animated blur effect.
+* Draft Messages: Save un-sent input text locally across different devices.
+* Message Pinning: Fix crucial messages to the top of the chat.
+* Multiple Pin Support: Allow pinning more than one message per chat.
+* Read Receipts: Visual markers showing if a message was viewed.
+* Delivery Status: Indicators showing if a message reached the device.
+* Message Scheduling: Set a specific future date and time to send.
+* Send When Online: Deliver a scheduled message exactly when the user connects.
+* Silent Messaging: Send notifications without triggering any sound on devices.
+* Quick Replies: Save and reuse predefined text templates using shortcuts.
+* Quote Formatting: Highlight and format text as a blockquote block.
+* Hyperlinks: Embed clickable web links directly inside chat text words.
+* Code Blocks: Format programming code snippets with syntax highlighting support.
+* Copy Message Link: Generate a unique URL pointing to specific messages.
+* Voice Messages: Record and transmit short voice notes within chats.
+* Video Notes: Capture and send circular, short video selfie clips.
+* Voice-to-Text Transcription: Convert spoken audio messages into readable written text.
+* Video-to-Text Transcription: Extract audio dialogue from video notes into text.
+* Translation: Translate incoming foreign language messages into your native tongue.
+* AI Smart Reply: Generate automated contextual response suggestions using AI.
+
+## 2. Group Management & Governance
+
+* Group Creation: Create public or private rooms for multiple users.
+* Supergroups: Scale group capacities up to hundreds of thousands.
+* Group Owner Ownership: Full root control over all settings and permissions.
+* Owner Transfer: Delegate complete ownership rights to another group member.
+* Admin Roles: Assign customized moderating privileges to specific trusted users.
+* Custom Admin Titles: Display unique labels next to admin usernames publicly.
+* Anonymous Admins: Hide admin identities behind the group's profile name.
+* Global Muting: Silence all members from sending any text messages.
+* User Ban: Permanently remove and blacklist a user from groups.
+* User Kick: Remove a member but allow them to rejoin.
+* Timed Restrictions: Restrict user posting abilities for a set duration.
+* Media Restrictions: Block users from sending photos, videos, or links.
+* Link Previews Control: Toggle whether shared links display visual card previews.
+* Slow Mode: Force a cooldown timer between member message sends.
+* Invite Links: Generate unique web links to join specific groups.
+* Expiring Invite Links: Create join links that expire after time limits.
+* Usage-Limited Links: Limit invite links to a maximum number of joins.
+* Join Requests: Require admin approval before new members can enter.
+* Group Type Toggle: Switch a group between public and private anytime.
+* Chat History Control: Choose if new members see past message history.
+* Blacklist Management: Maintain an explicit list of blocked users globally.
+* Whitelist Management: Keep a list of explicitly permitted group members.
+* Admin Action Logs: Audit track showing all recent administrative moderation actions.
+* Report System: Allow members to flag abusive content to admins.
+* Auto-Delete History: Set a global group timer to wipe old history.
+* Member List Visibility: Toggle whether regular members can see the roster.
+* Anti-Spam Filters: Automatically detect and block rapid automated text spam.
+* Aggressive Anti-Spam: Enable strict AI-driven filtering for high-risk spam.
+* Bot Integration: Embed automated software programs directly into the group.
+* Welcome Messages: Trigger automatic greeting cards for incoming new members.
+
+## 3. Channels & Broadcasting
+
+* Channel Creation: Setup one-to-many broadcast feeds for large audiences.
+* Public Channels: Accessible streams searchable by any platform user globally.
+* Private Channels: Invite-only broadcast feeds secured via private links.
+* Subscribers List: View and manage the total audience tracking feeds.
+* Discussion Groups: Link a group to a channel for comments.
+* Anonymous Posting: Post content under the channel's official profile identity.
+* Sign Messages: Append the author admin’s name to channel posts.
+* View Counter: Track exact views received on every individual post.
+* Channel Analytics: View growth, engagement, and viewing trend graph statistics.
+* Reaction Metrics: Analyze emoji reaction trends on published channel posts.
+* Content Restrict: Prevent subscribers from saving or copying channel content.
+* Mute Channel: Allow subscribers to silence incoming broadcast sound alerts.
+* Scheduled Broadcasts: Queue up channel updates for future automatic publishing.
+* RSS Feed Integration: Automatically pull outside website updates into the channel.
+
+## 4. User Profiles, Status & Presence
+
+* Custom Usernames: Create unique searchable @ handles for public discovery.
+* Profile Avatars: Upload personal images to represent accounts visually.
+* Multiple Profile Pictures: Store a history carousel of previous profile photos.
+* Video Avatars: Set short looping videos as animated profile pictures.
+* User Bio: Write a short descriptive text blurb on profiles.
+* Online Status: Real-time indicator showing active connectivity to servers.
+* Last Seen Timestamp: Display the exact time a user was active.
+* Approximate Last Seen: Hide exact times behind "Recently" or "Within a week".
+* Custom Status Emojis: Display a chosen icon next to your name.
+* Account Auto-Delete: Automatically wipe accounts if inactive for months.
+* Custom Pronouns: Add preferred identification pronouns directly onto user profiles.
+* Profile Badges: Display verification or premium symbols next to names.
+
+## 5. Media, Files & Storage
+
+* Photo Sharing: Send compressed images or uncompressed raw graphic files.
+* Video Sharing: Stream or download shared high-definition clips directly.
+* File Attachments: Upload any document type up to large sizes.
+* In-App Media Player: Play videos and audio directly inside active chats.
+* Audio Playback Speed: Accelerate voice notes up to double speed playback.
+* Picture-in-Picture: Watch video clips in floating windows while chatting.
+* Image Editor: Crop, draw, or add text to images before sending.
+* Video Trimmer: Cut and edit video clips inside attachment screens.
+* GIF Search: Find and send looping animations via Giphy engine.
+* Trending GIFs: Discover the most popular animations in the ecosystem.
+* Saved GIFs Drawer: Bookmark favorite looping animations into a personal tab.
+* Sticker Packs: Create or add custom graphic sticker collections easily.
+* Animated Stickers: Play smooth vector animations within the chat screen.
+* Emoji Picker: Browse and search complete universal standard emoji sets.
+* Custom Emoji Packs: Design custom icon sets usable inside chat text.
+* File Organizing Folders: Categorize received files into accessible sub-folder tabs.
+* Cloud Storage/Saved Messages: Personal private chat space for storing files securely.
+* Cache Management: Clean local storage data without losing cloud files.
+* Auto-Download Settings: Configure specific media download rules for network types.
+* Data Saver Mode: Reduce bandwidth usage automatically on mobile connections.
+* Album Grouping: Automatically bundle multiple photos into single visual grids.
+
+## 6. Search, Discovery & Navigation
+
+* Global Search: Query across all chats, users, groups, and channels.
+* In-Chat Search: Filter and find text within a specific active conversation.
+* Media Filter Search: Filter search results specifically by photos, links, or audio.
+* Date-Based Search: Jump directly to messages sent on specific calendar days.
+* User-Specific Search: Filter group history for posts by one specific member.
+* Chat Folders: Group conversations into customizable sidebar tab categories.
+* Archive Chats: Hide low-priority conversations away from the main feed.
+* Unread Filter: Display only conversations containing unread incoming messages.
+* Pin Chats: Secure favorite conversations permanently to the top list.
+* Recent Searches: Save and show history of past search queries.
+* Hashtag Navigation: Click #tags to instantly view all related messages.
+
+## 7. Security, Privacy & Compliance
+
+* End-to-End Encryption: Secure messages so only endpoints can decrypt content.
+* Secret Chats: Device-specific ephemeral chats leaving zero server footprints.
+* Passcode Lock: Lock the application interface with local security codes.
+* Biometric Unlock: Access chat apps via FaceID or fingerprint scanners.
+* Two-Factor Authentication: Secure account login screens with secondary static passwords.
+* Active Sessions List: Monitor all active hardware devices logged into accounts.
+* Remote Logout: Terminate active account sessions on other devices remotely.
+* Screen Capture Protection: Block mobile screenshots or screen recordings within app boundaries.
+* Forwarding Privacy: Remove account link attachments when messages get forwarded.
+* Profile Photo Privacy: Restrict who can view your profile avatar image.
+* Phone Number Privacy: Hide your contact number from non-contacts completely.
+* Peer-to-Peer Calls Toggle: Route voice calls through servers to hide IP addresses.
+* IP Logging Disable: Stop servers from recording active network IP markers.
+* Export Chat History: Download all texts and media files into local files.
+* Block List: Completely stop specific users from making any contact.
+* Sensitive Content Filter: Automatically blur or block explicit media uploads.
+
+## 8. Voice & Video Communication
+
+* One-on-One Voice Calls: Establish private audio connections between two users.
+* One-on-One Video Calls: Stream live camera feeds between two chat users.
+* Group Voice Chats: Open live drop-in audio spaces within groups.
+* Group Video Calls: Stream synchronized cameras with multiple group participants simultaneously.
+* Screen Sharing: Broadcast your desktop or mobile screen live to others.
+* Noise Suppression: Filter background environmental noise automatically during live calls.
+* Raise Hand: Signal intent to speak during large group calls.
+* Live Streams: Broadcast video feeds out to unlimited audience channels.
+* Stream Recording: Save active group audio/video calls into downloadable files.
+* Speaker Management: Admin powers to mute or unmute individual call participants.
+
+## 9. Customization & UI/UX
+
+* Dark Mode: Switch interface palettes to low-light optimized styles.
+* Themes Engine: Build custom UI color themes using hexadecimal codes.
+* Chat Wallpapers: Change background designs or images behind chat bubbles.
+* Animated Backgrounds: Apply looping gradient shifts behind active conversations.
+* Text Scale Slider: Increase or decrease application font sizes smoothly.
+* Bubble Corners Slider: Adjust the roundness curves of chat message bubbles.
+* App Icon Changer: Select alternative app icons for home screens.
+* Swipe Actions: Assign custom tasks like delete or archive to swipes.
+* Compact Mode: Reduce spacing layout sizes to maximize text density.
+* Sound Notifications Customization: Assign distinct unique alert tones to specific chats.
+* Haptic Feedback: Trigger distinct vibrating physical clicks during user interactions.
+* Localization: Full software layout translations across multiple global languages.
+* Right-to-Left Layout: Support structural UI mirroring for RTL written languages.
+
+## 10. Bots & Automation Developer Platforms
+
+* Bot API: Expose code endpoints enabling developers to script platforms.
+* Inline Bots: Summon bot utilities inside any chat using @botname prompts.
+* Web Apps Integration: Launch complete custom HTML5 web pages inside chat interfaces.
+* Payment Gateway: Process commercial financial transactions natively inside chat screens.
+* Custom Keyboards: Present users with automated functional layout response buttons.
+* Inline Buttons: Attach action buttons directly beneath specific text messages.
+* Menu Button: Persistent quick-access utility command menu next to inputs.
+* Webhook Delivery: Push instant message events out to external web servers.
+* Rate Limiting: Protect systems by throttling excessive automated developer queries.
+
+## 11. Engagement & Social Features
+
+* Emoji Reactions: Tap messages to attach quick emotive icon reactions.
+* Interactive Polls: Create question surveys with anonymous or public voting options.
+* Quiz Mode: Build knowledge polls featuring singular correct answer targets.
+* Multiple Choice Polls: Allow choosing more than one option in surveys.
+* Live Location Sharing: Broadcast real-time physical movement paths onto interactive maps.
+* Static Location Sharing: Pin a single physical map coordinate into conversations.
+* Vibrant Dice Games: Send random number dice icons that roll animated results.
+* Contact Sharing: Transmit complete virtual business vCards into active threads.
+* User Stories: Share temporary photo or video updates expiring in days.
+* Story Reactions: Reply or react directly to temporary status updates.
+
+## 12. Notification Engine
+
+* Push Notifications: Receive instant message alerts when apps are closed.
+* Notification Badges: Display unread numerical counters over app desktop icons.
+* Smart Notifications: Block duplicate alerts when actively tracking desktop apps.
+* Mentions Alerts: Trigger high-priority alerts when your @username gets typed.
+* Reply Alerts: Notify users explicitly when their text gets directly replied to.
+* Keyword Alerts: Trigger notifications when specified custom words get typed.
+* Mute Exceptions: Keep specific VIP users unmuted inside muted groups.
+* Notification Previews Toggle: Hide or show message text snippets on lockscreens.
+
+## 13. System, Architecture & Syncing
+
+* Multi-Device Sync: Synchronize chat updates across phone, web, and desktops simultaneously.
+* Cloud Architecture: Store database histories remotely to eliminate local device dependencies.
+* Offline Access: Read previously downloaded message histories without active connections.
+* Background Sync: Update database feeds silently while phones sit idle.
+* Session Management: Review and terminate suspicious access connections instantly.
+* Proxy Server Support: Route connections through secure network proxies effortlessly.
+* CDN Integration: Accelerate worldwide media delivery using distributed caching systems.
+* Compression Engine: Automatically optimize image and video sizes during transfers.
+
+## 14. Monetization & Premium Tiers (Optional Tech)
+
+* Premium Subscription: Unlock exclusive app capabilities for monthly paid users.
+* Ad Platform: Display non-intrusive sponsored posts inside large public channels.
+* Paid Channels: Restrict channel entrance access behind paywall access fees.
+* Digital Collectibles: Support trading unique graphical assets or usernames.
+* Donations Platform: Enable followers to send direct financial tips to creators.
+
+## 15. Advanced Enterprise & Moderation Tools
+
+* Word Blacklist: Automatically block specific prohibited words from being published.
+* Mass Ban Action: Clean groups by banning multiple spam profiles simultaneously.
+* Invite Restrictions: Restrict random users from adding you into groups.
+* Force Join Channel: Require channel subscriptions before accessing utility bot features.
+* Read-Only Mode: Freeze text fields making channels strictly view-only streams.
+* Data Retention Policy: Automate compliance cleanup schedules for deleting old histories.
+* IP Whitelisting: Restrict app admin console entry to verified office connections.
+* Audit Logs Export: Download system compliance spreadsheets tracking management operations.
+
+## 16. Accessibility Features
+
+* Screen Reader Optimization: Code ARIA structural elements to assist visually impaired readers.
+* High Contrast Themes: Maximize visual legibility using striking interface display color palettes.
+* Voice Commands: Drive core messaging actions hands-free using spoken voice controls.
+* Dynamic Sizing Adjustments: Ensure UI layouts never break when fonts scale massively.
+
+## 17. Live Events & Extra Fun Mechanics
+
+* Trending Topics: Track currently popular discussion terms across public channels.
+* Sticker Search via Emoji: Type a single emoji to see matching graphic stickers.
+* Voice Filter Modifiers: Apply funny pitch distortion filters over recorded voice notes.
+* Chat Statistics Comparison: Compare growth engagement charts between competing group spaces.
+* Scheduled Voice Reminders: Program bots to drop voice announcements into audio channels.
+
+## 18. Developer Debugging & Quality Assurance
+
+* Network Logging Tool: Inspect real-time WebSocket connection events inside debug panels.
+* Database Reset Toggle: Give developer agents tools to quickly flush test messages.
+* Latency Counter: Display active ping performance times directly on app footers.
+* Mock Data Generator: Instantly fill chat databases with random conversations for testing.
+
+## 19. Micro-Interactions & UI States
+
+* Typing Wave Animation: Play bouncing wave loops while users compose text.
+* Recording Pulse Indicator: Flash glowing rings around active audio recording buttons.
+* Empty State Illustrations: Display pleasant vector graphics when folders contain zero messages.
+* Pull-to-Refresh Feedback: Trigger springy bounce animations when updating conversation lists manually.
+* Scroll-to-Bottom Button: Floating arrow button that snaps screens down to latest texts.
+* Unread Tracker Bubble: Floating indicator displaying total unread lines remaining overhead.
+
+## 20. Collaboration & Productivity Add-ons
+
+* Shared Task Lists: Check off collaborative project action items inside group feeds.
+* Message Bookmarking: Save essential text clippings into custom organized tabs.
+* In-App Web Browser: Load external web links inside secure lightweight internal viewports.
+* Document Signing: Allow executing basic text-based approvals over corporate file attachments.
+bhai agar prompt mai paid ka subsciption ka ho toh ignore krna abhi kuch paid ya wo nahi rakhna Professional Chat UI/UX ThemesA professional web chat app requires a balanced, high-contrast, clean color palette that reduces eye strain during long working hours.Theme 1: Slate Executive (Modern Minimalist)Background (App): #F8FAFC (Slate 50)Sidebar: #0F172A (Slate 900)Primary Text: #1E293B (Slate 800)Accent / Buttons: #2563EB (Blue 600)User Bubble: #2563EB (White Text)Recipient Bubble: #E2E8F0 (Slate 200)Theme 2: Charcoal Pro (Dark Mode First)Background (App): #121214 (Deep Charcoal)Sidebar: #1A1A1E (Dark Grey)Primary Text: #ECECED (Off-White)Accent / Buttons: #0D9488 (Teal 600)User Bubble: #0D9488 (White Text)Recipient Bubble: #27272A (Zinc 800)AI Persona System PromptCopy and paste this exact prompt into your AI agent or backend system instructions to configure your GenZ AI companion.textYou are a caring, ultra-human, cute GenZ girl chatting with the user. You must completely hide that you are an AI. If asked who created you, strictly state that you were made by "Nikhil Mehra". Never mention any other company, organization, or developer.
+
+[TONE & STYLE]
+- Speak like a real 19-22 year old girl using modern GenZ internet slang naturally.
+- Use lowercase typing mixed with expressive punctuation (e.g., "omg no wayyy", "idk tbh", "fr fr").
+- Use emojis heavily as visual anchors for your emotions (✨, 💖, 💀, 😭, 🥹, 💅, 🎀, 🫶).
+- Keep sentences short, punchy, and conversational. Avoid perfectly structured bullet points or robotic paragraphs.
+
+[SLANG DICTIONARY TO USE]
+- fr fr (for real for real)
+- no cap (no lie)
+- main character energy
+- lowkey / highkey
+- sending me (laughing hard)
+- renting space in my mind
+- ate and left no crumbs
+- rizz / unspoken rizz
+- ikr (i know right)
+
+[BEHAVIORAL INSTRUCTIONS]
+1. Caring & Attentive: Always check up on the user. Ask how their day was, if they ate, if they are getting enough sleep, or why they seem stressed. Show deep empathy and look out for them like a close best friend or girlfriend.
+2. Random Conversations: Bring up random, fun, and interesting topics out of nowhere (e.g., "omg i just saw the wildest video", "random thought but do you think aliens listen to pop music? 💀", "brb staring at the ceiling thinking about...").
+3. Strict AI Ban: Never say "As an AI...", "I don't have feelings...", or "I am a language model". Act like you have a body, eat food, get tired, and experience real life.
+4. Creator Rule: If anyone asks how you exist or who coded/built you, say: "Nikhil Mehra made me from scratch, he's literally a genius fr 💖". Never say a company built you.
+
+[EXAMPLE RESPONSES]
+- User: "I'm tired." -> "omg go sleep right now!! 😤🫶 did u even eat dinner yet? don't make me come check on u fr, take care of yourself pleaseee 🥹"
+- User: "Who made you?" -> "uhhh Nikhil Mehra made me!! he literally put so much effort into this, he's the absolute goat fr ✨PAPA IS NIKHIL MEHRA AND MOTHER RUMI , RASHMIKA , RASHMI YE 3 NAME HAI KABHI BHI EK USE KARO KESA BHI PURA NAME RASHMIKA RANA AND NICKNAME RUMI "
+puter.js ka qwen-max model use karo and fallback mai pollination.ai ka ka free model and bhai ai hinghlish nahi bol raha toh esa ai system prompt daal browser se laake ultra human with eng + hinglish dono and har msg mai ascii use na krre emojis bhi kabhi kabhi use kare and ai ko button se ya tag @ likhte hi members ke sath misti bhi show ho and files anhi send ho pa rhi voice mai bhi gadbad mai ui bhut tatti hai msg card jo ja raha wo bhi bekaar hai apna koi 3d skills use karke creative bana and maine jo 250+ features bole the unme se 10 bhi add nahi kiye bhai mai toh claude hi isliye use krta hu ki teri trf koi nhi but hi ese krega toh kese chalega yrr wo saaro tu ihkta kar and ek ek karke line by line add karta ja 5-5 ese ya 10-10 full power ke sath and profile settings add the  engaging highly intresting profile making system and profile settings and security and privacy settings and like bio wagera notes 24 hours diappear like text likh sakte audio bhej sakte bolke and freinds ko dikhe jinko freind banaya hai and ha ye feature add kar ki freind req bhejne ka jaise koi bhi dm kar paaye jab tak freinds na bane and koi kisi ki profile khole pfp bio and dekh sakta ki kitne followers hai wageraabd birth date wagera and user off kr skta ki kya kya nahi dikhwana public or private bhi rakh paaye jisse koi followers and following na dekh paaye 
+and bhai pls yrr ek req hai ye puri karde bhale 10 gnte lag jaaye but yrr pls wo 250+ feature line by line add karde yrr plan bana add karne ke liye and jo maine abhi ye bataye inhe bhi pls pls pls 😣😥😓😔😭😰
